@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MatchRequestCard } from "./MatchRequestCard";
+import { AdUnit } from "./AdUnit";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { MatchRequestWithUser, MatchConnection } from "@shared/schema";
 import { useWebSocket } from "@/hooks/useWebSocket";
@@ -392,6 +393,11 @@ export function MatchFeed({
         activeFilters={filters}
       />
 
+      {/* Ad Space 1 */}
+      <div className="my-6">
+        <AdUnit slotId="7186282934" format="horizontal" className="text-center" />
+      </div>
+
       {/* Match Feed with Tabs */}
       <Tabs defaultValue="lfg" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
@@ -469,26 +475,32 @@ export function MatchFeed({
                     <Badge variant="secondary" className="text-xs">{lfgOtherPosts.length}</Badge>
                   </div>
                   <div className="space-y-4">
-                    {lfgOtherPosts.map((match) => (
-                      <MatchRequestCard
-                        key={match.id}
-                        id={match.id}
-                        userId={match.userId}
-                        gamertag={match.gamertag}
-                        profileImageUrl={match.profileImageUrl}
-                        gameName={match.gameName}
-                        gameMode={match.gameMode}
-                        description={match.description}
-                        region={match.region}
-                        tournamentName={match.tournamentName}
-                        status={match.status}
-                        timeAgo={match.timeAgo}
-                        isOwn={false}
-                        currentUserId={currentUserId}
-                        onAccept={() => onAcceptMatch(match.id, match.userId)}
-                        onDecline={() => onDeclineMatch(match.id)}
-                        onDelete={() => onDeleteMatch(match.id)}
-                      />
+                    {lfgOtherPosts.map((match, index) => (
+                      <div key={match.id}>
+                        <MatchRequestCard
+                          id={match.id}
+                          userId={match.userId}
+                          gamertag={match.gamertag}
+                          profileImageUrl={match.profileImageUrl}
+                          gameName={match.gameName}
+                          gameMode={match.gameMode}
+                          description={match.description}
+                          region={match.region}
+                          tournamentName={match.tournamentName}
+                          status={match.status}
+                          timeAgo={match.timeAgo}
+                          isOwn={false}
+                          currentUserId={currentUserId}
+                          onAccept={() => onAcceptMatch(match.id, match.userId)}
+                          onDecline={() => onDeclineMatch(match.id)}
+                          onDelete={() => onDeleteMatch(match.id)}
+                        />
+                        {index === 2 && lfgOtherPosts.length > 3 && (
+                          <div className="my-4">
+                            <AdUnit slotId="7186282935" format="horizontal" className="text-center" />
+                          </div>
+                        )}
+                      </div>
                     ))}
                   </div>
                 </div>
