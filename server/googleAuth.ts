@@ -153,15 +153,18 @@ export function getSession() {
   
   const isProduction = process.env.NODE_ENV === "production";
   const isReplitEnv = !!process.env.REPL_ID;
-  
-  const isCrossOriginDeployment = 
-    isReplitEnv || 
+
+  const isCrossOriginDeployment =
+    isReplitEnv ||
     (isProduction && !!process.env.FRONTEND_URL && !!process.env.BACKEND_ONLY);
-  
+
+  // For cross-origin deployments (e.g., Vercel frontend + Railway backend)
+  // we need cookies to be sent from the browser on cross-site requests.
+  // Browsers require `SameSite=None` and `Secure=true` for cross-site cookies.
   const cookieConfig = {
     httpOnly: true,
-    secure: false, // Changed to false for easier debugging in Replit environment
-    sameSite: "lax", // Changed to lax for simpler session management
+    secure: isProduction && !!process.env.FRONTEND_URL, // require HTTPS in prod
+    sameSite: isCrossOriginDeployment && isProduction ? "none" : "lax",
     maxAge: sessionTtl,
   } as const;
 
