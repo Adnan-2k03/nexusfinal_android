@@ -4,6 +4,7 @@ import cors from "cors";
 import pg from "pg";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { pool } from "./db";
 
 async function waitForDatabase(maxRetries = 30, initialDelayMs = 3000): Promise<void> {
   // Railway databases can take 30-90 seconds to wake from sleep
@@ -130,6 +131,14 @@ app.use((req, res, next) => {
     // Wait for database to be ready before starting (important for Railway where DB might start after app)
     if (process.env.NODE_ENV === 'production') {
       await waitForDatabase(15, 2000); // 15 retries, 2 seconds apart = 30 seconds max wait
+    }
+
+    // Ensure critical schema changes exist (idempotent ALTERs)
+    try {
+      await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash varchar");
+      log('✅ [MIGRATE] Ensured users.password_hash column exists');
+    } catch (err: any) {
+      console.warn('⚠️ [MIGRATE] Could not ensure schema change:', err?.message || err);
     }
     
     // Middleware to ensure req.user is available for all routes if JWT authenticated
