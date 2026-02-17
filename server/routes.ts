@@ -171,21 +171,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
         throw new Error("Could not find or create dev-user");
       }
 
-      req.login(user, (loginErr) => {
-        if (loginErr) {
-          console.error("[Dev Login] Passport login error:", loginErr);
-          return res.status(500).json({ message: "Login failed" });
-        }
-        req.session.save((saveErr) => {
-          if (saveErr) {
-            console.error("[Dev Login] Session save error:", saveErr);
-            return res.status(500).json({ message: "Session save failed" });
+      // Use Passport's req.login when available, otherwise fall back to a manual session
+      if (typeof (req as any).login === 'function') {
+        (req as any).login(user, (loginErr: any) => {
+          if (loginErr) {
+            console.error("[Dev Login] Passport login error:", loginErr);
+            return res.status(500).json({ message: "Login failed" });
           }
-          console.log("[Dev Login] Success");
-          res.setHeader('Content-Type', 'application/json');
-          res.json(user);
+          req.session.save((saveErr) => {
+            if (saveErr) {
+              console.error("[Dev Login] Session save error:", saveErr);
+              return res.status(500).json({ message: "Session save failed" });
+            }
+            console.log("[Dev Login] Success (passport)");
+            res.setHeader('Content-Type', 'application/json');
+            res.json(user);
+          });
         });
-      });
+      } else {
+        try {
+          // Minimal manual session handling for environments without passport
+          (req as any).user = user;
+          if (!req.session) (req as any).session = {};
+          // store a simple identifier so other middlewares can detect auth
+          (req as any).session.userId = user.id || user.gamertag || 'dev-user';
+          // attempt to save session if supported
+          if (typeof req.session.save === 'function') {
+            req.session.save((saveErr: any) => {
+              if (saveErr) {
+                console.error("[Dev Login] Session save error (manual):", saveErr);
+                return res.status(500).json({ message: "Session save failed" });
+              }
+              console.log("[Dev Login] Success (manual)");
+              res.setHeader('Content-Type', 'application/json');
+              res.json(user);
+            });
+          } else {
+            console.log("[Dev Login] Success (manual, no session.save)");
+            res.setHeader('Content-Type', 'application/json');
+            res.json(user);
+          }
+        } catch (err) {
+          console.error('[Dev Login] Manual session error:', err);
+          res.status(500).json({ message: 'Login failed' });
+        }
+      }
     } catch (error) {
       console.error("[Dev Login] Unexpected error:", error);
       res.status(500).json({ message: "Internal server error" });
