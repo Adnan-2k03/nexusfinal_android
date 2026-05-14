@@ -1,0 +1,116 @@
+2026-05-15 02:27:49.73
+cb042752
+User
+✅ Firebase Admin SDK initialized successfully
+2026-05-15 02:27:49.73
+cb042752
+User
+🔄 [Database] Connection attempt 1/15...
+2026-05-15 02:27:49.76
+cb042752
+User
+⚠️ [Database] Attempt 1 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:27:49.76
+cb042752
+User
+⏳ [Database] Retrying... Waiting 3s...
+2026-05-15 02:27:52.76
+cb042752
+User
+🔄 [Database] Connection attempt 2/15...
+2026-05-15 02:27:52.76
+cb042752
+User
+⚠️ [Database] Attempt 2 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:27:52.76
+cb042752
+User
+⏳ [Database] Retrying... Waiting 4s...
+2026-05-15 02:27:56.77
+cb042752
+User
+🔄 [Database] Connection attempt 3/15...
+2026-05-15 02:27:56.77
+cb042752
+User
+⏳ [Database] Retrying... Waiting 5s...
+2026-05-15 02:27:56.77
+cb042752
+User
+⚠️ [Database] Attempt 3 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:28:01.78
+cb042752
+User
+🔄 [Database] Connection attempt 4/15...
+2026-05-15 02:28:01.78
+cb042752
+User
+⚠️ [Database] Attempt 4 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:28:01.78
+cb042752
+User
+⏳ [Database] Retrying... Waiting 6s...
+2026-05-15 02:28:07.79
+cb042752
+User
+🔄 [Database] Connection attempt 5/15...
+2026-05-15 02:28:07.79
+cb042752
+User
+⚠️ [Database] Attempt 5 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:28:07.79
+cb042752
+User
+⏳ [Database] Retrying... Waiting 7s...
+2026-05-15 02:28:14.80
+cb042752
+User
+🔄 [Database] Connection attempt 6/15...
+2026-05-15 02:28:14.81
+cb042752
+User
+⏳ [Database] Retrying... Waiting 8s...
+2026-05-15 02:28:14.81
+cb042752
+User
+⚠️ [Database] Attempt 6 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:28:22.82
+cb042752
+User
+🔄 [Database] Connection attempt 7/15...
+2026-05-15 02:28:22.82
+cb042752
+User
+⚠️ [Database] Attempt 7 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:28:22.82
+cb042752
+User
+⏳ [Database] Retrying... Waiting 9s...
+2026-05-15 02:28:31.83
+cb042752
+User
+🔄 [Database] Connection attempt 8/15...
+2026-05-15 02:28:31.84
+cb042752
+User
+⚠️ [Database] Attempt 8 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:28:31.84
+cb042752
+User
+⏳ [Database] Retrying... Waiting 10s...
+2026-05-15 02:28:41.84
+cb042752
+User
+🔄 [Database] Connection attempt 9/15...
+2026-05-15 02:28:41.85
+cb042752
+User
+⏳ [Database] Retrying... Waiting 11s...
+2026-05-15 02:28:41.85
+cb042752
+User
+⚠️ [Database] Attempt 9 failed: getaddrinfo EAI_AGAIN base
+2026-05-15 02:28:47.71
+cb042752
+System
+a port configuration was specified but the required port was never opened, expected port 5000
