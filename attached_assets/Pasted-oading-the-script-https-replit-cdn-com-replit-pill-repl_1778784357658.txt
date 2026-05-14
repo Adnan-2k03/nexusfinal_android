@@ -1,0 +1,31 @@
+oading the script 'https://replit-cdn.com/replit-pill/replit-pill.global.js' violates the following Content Security Policy directive: "script-src-elem 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://apis.google.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.google.com https://*.googlesyndication.com https://*.google-analytics.com". The action has been blocked.Understand this error
+pagead2.googlesyndication.com/:1 Framing 'https://googleads.g.doubleclick.net/' violates the following Content Security Policy directive: "frame-src 'self' https://www.google.com https://*.firebaseapp.com". The request has been blocked.
+Understand this error
+pagead2.googlesyndication.com/:1 Framing 'https://googleads.g.doubleclick.net/' violates the following Content Security Policy directive: "frame-src 'self' https://www.google.com https://*.firebaseapp.com". The request has been blocked.
+Understand this error
+manifest.json:1 Manifest: Line: 1, column: 1, Syntax error.Understand this error
+chunk-RPCDYKBN.js?v=29f51833:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+storage.ts:88 ❌ [AuthStorage] No token found in any storage
+admob.ts:45 AdMob is only available on native platforms
+admob.ts:199 App open ads are only available on native platforms
+registerSW.ts:9 [PWA] Service Worker registered successfully: https://e7c8ee28-3f39-4340-a655-2556057dc9a9-00-2dqq9wddkzvb3.sisko.replit.dev/
+manifest.json:1 Manifest: Line: 1, column: 1, Syntax error.Understand this error
+2storage.ts:88 ❌ [AuthStorage] No token found in any storage
+storage.ts:88 ❌ [AuthStorage] No token found in any storage
+show_ads_impl_fy2021.js:99 Loading the script 'https://ep2.adtrafficquality.google/sodar/sodar2.js' violates the following Content Security Policy directive: "script-src-elem 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://apis.google.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.google.com https://*.googlesyndication.com https://*.google-analytics.com". The action has been blocked.
+(anonymous) @ show_ads_impl_fy2021.js:99
+bk @ show_ads_impl_fy2021.js:99
+ik @ show_ads_impl_fy2021.js:102
+await in ik
+Q2 @ show_ads_impl_fy2021.js:724
+(anonymous) @ show_ads_impl_fy2021.js:724Understand this error
+show_ads_impl_fy2021.js:99 Uncaught (in promise) undefined
+f.onerror @ show_ads_impl_fy2021.js:99
+script
+(anonymous) @ show_ads_impl_fy2021.js:99
+bk @ show_ads_impl_fy2021.js:99
+ik @ show_ads_impl_fy2021.js:102
+await in ik
+Q2 @ show_ads_impl_fy2021.js:724
+(anonymous) @ show_ads_impl_fy2021.js:724Understand this error
+iframe.js:311 Info: The current domain is not authorized for OAuth operations. This will prevent signInWithPopup, signInWithRedirect, linkWithPopup and linkWithRedirect from working. Add your domain (e7c8ee28-3f39-4340-a655-2556057dc9a9-00-2dqq9wddkzvb3.sisko.replit.dev) to the OAuth redirect domains list in the Firebase console -> Authentication -> Settings -> Authorized domains tab.

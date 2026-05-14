@@ -31,7 +31,7 @@ export async function setupVite(app: Express, server: Server) {
     },
     server: {
       middlewareMode: true,
-      hmr: { server },
+      hmr: process.env.REPLIT_DEV_DOMAIN ? false : { server },
       allowedHosts: true as const,
     },
     appType: "custom",

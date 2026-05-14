@@ -1,37 +1,19 @@
-// Service Worker for GameMatch PWA
-// Handles offline caching and push notifications
+const CACHE_NAME = 'nexus-match-v3';
 
-const CACHE_NAME = 'gamematch-v2';
-const RUNTIME_CACHE = 'gamematch-runtime-v2';
-
-const urlsToCache = [
-  '/',
-  '/offline.html'
-];
-
-// Install event - cache resources
 self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Installing...');
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('[Service Worker] Caching app shell');
-        return cache.addAll(urlsToCache);
-      })
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(['/offline.html', '/manifest.json']);
+    }).then(() => self.skipWaiting())
   );
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Activating...');
-  const cacheWhitelist = [CACHE_NAME, RUNTIME_CACHE];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            console.log('[Service Worker] Deleting old cache:', cacheName);
+          if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
         })
@@ -40,131 +22,42 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - serve from cache, fallback to network with runtime caching
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests and chrome-extension requests
-  if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
+  if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+
+  if (url.origin !== self.location.origin) return;
+
+  // Never cache HTML documents — always fetch fresh from network
+  if (event.request.mode === 'navigate' ||
+      url.pathname === '/' ||
+      url.pathname.endsWith('.html')) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match('/offline.html'))
+    );
     return;
   }
 
-  const { request } = event;
-  const requestURL = new URL(request.url);
-
-  // Skip API calls from caching
-  if (requestURL.pathname.startsWith('/api')) {
+  // Never cache Vite dev assets (they have ?v= or ?t= query params)
+  if (url.search.includes('v=') || url.search.includes('t=') ||
+      url.pathname.startsWith('/@') || url.pathname.startsWith('/src/') ||
+      url.pathname.startsWith('/node_modules/') || url.pathname.startsWith('/api/')) {
     return;
   }
 
-  event.respondWith(
-    fetch(request.clone()).then((response) => {
-      // Network-first strategy for better development experience
-      if (response && response.status === 200) {
-        // Cache static assets (JS, CSS, images, fonts)
-        const shouldCache = /\.(js|css|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot)$/i.test(requestURL.pathname)
-          || requestURL.pathname === '/'
-          || requestURL.pathname === '/index.html';
-
-        if (shouldCache) {
-          const responseToCache = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => {
-            cache.put(request, responseToCache);
-          });
-        }
-      }
-      return response;
-    }).catch(() => {
-      // Fallback to cache if network fails
-      return caches.match(request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        // Return offline page for navigation requests
-        if (request.mode === 'navigate') {
-          return caches.match('/offline.html');
-        }
-        throw new Error('No cached content available');
-      });
-    })
-  );
-});
-
-// Push notification event
-self.addEventListener('push', (event) => {
-  console.log('[Service Worker] Push notification received:', event);
-
-  let data = { title: 'GameMatch', message: 'New notification' };
-  
-  if (event.data) {
-    try {
-      data = event.data.json();
-    } catch (e) {
-      data.message = event.data.text();
-    }
-  }
-
-  const options = {
-    body: data.message,
-    icon: '/icon-192.png',
-    badge: '/icon-96.png',
-    vibrate: [200, 100, 200],
-    data: {
-      url: data.url || '/',
-      type: data.type,
-      relatedUserId: data.relatedUserId,
-      relatedMatchId: data.relatedMatchId,
-    },
-    actions: [
-      {
-        action: 'view',
-        title: 'View'
-      },
-      {
-        action: 'close',
-        title: 'Close'
-      }
-    ],
-    tag: data.type || 'notification',
-    requireInteraction: true,
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
-});
-
-// Notification click event
-self.addEventListener('notificationclick', (event) => {
-  console.log('[Service Worker] Notification clicked:', event);
-  
-  event.notification.close();
-
-  if (event.action === 'close') {
-    return;
-  }
-
-  // Get the URL to navigate to
-  const urlToOpen = event.notification.data?.url || '/';
-  const notificationType = event.notification.data?.type;
-
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true })
-      .then((clientList) => {
-        // If a window is already open, focus it and send navigation message
-        if (clientList.length > 0) {
-          const client = clientList[0];
-          client.focus();
-          // Send message to client to navigate
-          client.postMessage({
-            type: 'NAVIGATE',
-            url: urlToOpen,
-            notificationType: notificationType
-          });
-          return client;
-        }
-        // Otherwise, open a new window
-        if (clients.openWindow) {
-          return clients.openWindow(urlToOpen);
-        }
+  // Cache-first for static assets (images, fonts, icons)
+  if (/\.(png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot|ico)$/i.test(url.pathname)) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        return cached || fetch(event.request).then((response) => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        });
       })
-  );
+    );
+  }
 });

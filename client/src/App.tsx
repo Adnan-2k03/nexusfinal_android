@@ -45,7 +45,7 @@ import NotFound from "@/pages/not-found";
 import { StarBackground } from "@/components/StarBackground";
 import { WebGLStarBackground } from "@/components/WebGLStarBackground";
 import { PushNotificationPrompt } from "@/components/PushNotificationPrompt";
-import { registerServiceWorker } from "@/registerSW";
+import { registerServiceWorker, unregisterServiceWorker } from "@/registerSW";
 import { initializeAdMob, showAppOpenAd } from "@/lib/admob";
 import { FloatingVoiceOverlay } from "@/components/FloatingVoiceOverlay";
 import { RewardsOverlay } from "@/components/RewardsOverlay";
@@ -876,9 +876,14 @@ function App() {
     return localStorage.getItem('voice-overlay-enabled') === 'true';
   });
 
-  // Register service worker for PWA and push notifications
+  // Register service worker for PWA and push notifications (production only)
   useEffect(() => {
-    registerServiceWorker();
+    if (import.meta.env.PROD) {
+      registerServiceWorker();
+    } else {
+      // In dev, unregister any stale SWs to prevent them from serving cached Vite assets
+      unregisterServiceWorker();
+    }
     initializeAdMob();
     // Show app open ad when app initializes (native platforms only)
     showAppOpenAd();

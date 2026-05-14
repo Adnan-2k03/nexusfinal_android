@@ -100,6 +100,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve service worker and manifest (must be before authentication)
   app.get('/sw.js', (req, res) => {
     const swPath = path.join(__dirname, '../public/sw.js');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.type('application/javascript');
     res.sendFile(swPath);
   });
