@@ -578,9 +578,6 @@ function Router() {
         <>
           <Route path="/connections">
             {() => {
-              if (currentPage !== "connections") {
-                setCurrentPage("connections");
-              }
               return (
                 <div className="min-h-screen relative">
                   {user && user.gamertag && (
@@ -601,9 +598,6 @@ function Router() {
           {isFeatureVisible("voice_channels") && (
             <Route path="/voice-channels">
               {() => {
-                if (currentPage !== "voice-channels") {
-                  setCurrentPage("voice-channels");
-                }
                 return (
                   <div className="min-h-screen relative">
                     {user && user.gamertag && (
@@ -624,9 +618,6 @@ function Router() {
           )}
           <Route path="/ads">
             {() => {
-              if (currentPage !== "ads") {
-                setCurrentPage("ads");
-              }
               return (
                 <div className="min-h-screen relative">
                   {mapUserForComponents(user as User | null) && (
@@ -646,9 +637,6 @@ function Router() {
           </Route>
           <Route path="/discover">
             {() => {
-              if (currentPage !== "search") {
-                setCurrentPage("search");
-              }
               return (
                 <div className="min-h-screen relative">
                   {user && user.gamertag && (
@@ -668,9 +656,6 @@ function Router() {
           </Route>
           <Route path="/earn">
             {() => {
-              if (currentPage !== "earn") {
-                setCurrentPage("earn");
-              }
               return (
                 <div className="min-h-screen relative">
                   {mapUserForComponents(user as User | null) && (
@@ -693,9 +678,6 @@ function Router() {
               if (isFeatureLocked("feedback")) {
                 return <LockedFeaturePage featureName="feedback" description="The feedback feature has been locked." />;
               }
-              if (currentPage !== "feedback") {
-                setCurrentPage("feedback");
-              }
               return (
                 <div className="min-h-screen relative">
                   {mapUserForComponents(user as User | null) && (
@@ -716,9 +698,6 @@ function Router() {
           {isFeatureVisible("groups") && (
             <Route path="/groups">
               {() => {
-                if (currentPage !== "groups") {
-                  setCurrentPage("groups");
-                }
                 return (
                   <div className="min-h-screen relative">
                     {user && user.gamertag && (
@@ -743,9 +722,6 @@ function Router() {
                 if (isFeatureLocked("tournaments")) {
                   return <LockedFeaturePage featureName="tournaments" description="The tournaments feature has been locked." />;
                 }
-                if (currentPage !== "tournaments") {
-                  setCurrentPage("tournaments");
-                }
                 return (
                   <div className="min-h-screen relative">
                     {user && user.gamertag && (
@@ -766,9 +742,6 @@ function Router() {
           )}
           <Route path="/messages">
             {() => {
-              if (currentPage !== "messages") {
-                setCurrentPage("messages");
-              }
               return (
                 <div className="min-h-screen relative">
                   {mapUserForComponents(user as User | null) && (
@@ -788,9 +761,6 @@ function Router() {
           </Route>
           <Route path="/profile-setup">
             {() => {
-              if (currentPage !== "profile-setup") {
-                setCurrentPage("profile-setup");
-              }
               return (
                 <div className="min-h-screen relative">
                   <div className="relative z-10">
@@ -804,9 +774,6 @@ function Router() {
             {() => {
               if (isFeatureLocked("discover")) {
                 return <LockedFeaturePage featureName="discover" description="The discover feature has been locked." />;
-              }
-              if (currentPage !== "search") {
-                setCurrentPage("search");
               }
               return (
                 <div className="min-h-screen relative">
@@ -827,9 +794,6 @@ function Router() {
           </Route>
           <Route path="/profile">
             {() => {
-              if (currentPage !== "profile") {
-                setCurrentPage("profile");
-              }
               return (
                 <div className="min-h-screen relative">
                   {mapUserForComponents(user as User | null) && (
@@ -849,9 +813,6 @@ function Router() {
           </Route>
           <Route path="/settings">
             {() => {
-              if (currentPage !== "settings") {
-                setCurrentPage("settings");
-              }
               return (
                 <div className="min-h-screen relative">
                   {mapUserForComponents(user as User | null) && (
@@ -871,9 +832,6 @@ function Router() {
           </Route>
           <Route path="/">
             {() => {
-              if (currentPage !== "home") {
-                setCurrentPage("home");
-              }
               return (
                 <div className="min-h-screen relative">
                   {mapUserForComponents(user as User | null) && (
