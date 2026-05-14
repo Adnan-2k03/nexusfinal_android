@@ -1,0 +1,124 @@
+2026-05-15 02:16:29.93
+c6845206
+User
+at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+2026-05-15 02:16:29.94
+c6845206
+System
+command finished with error [node ./dist/index.cjs]: exit status 1
+2026-05-15 02:16:30.01
+c6845206
+User
+^
+2026-05-15 02:16:30.01
+c6845206
+User
+at Module._load (node:internal/modules/cjs/loader:1038:27)
+2026-05-15 02:16:30.01
+c6845206
+User
+at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+2026-05-15 02:16:30.01
+c6845206
+User
+Error: Cannot find module '/home/runner/workspace/dist/index.cjs'
+2026-05-15 02:16:30.01
+c6845206
+User
+node:internal/modules/cjs/loader:1210
+2026-05-15 02:16:30.01
+c6845206
+User
+throw err;
+2026-05-15 02:16:30.56
+c6845206
+User
+}
+2026-05-15 02:16:30.56
+c6845206
+User
+code: 'MODULE_NOT_FOUND',
+2026-05-15 02:16:30.56
+c6845206
+User
+at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+2026-05-15 02:16:30.56
+c6845206
+User
+requireStack: []
+2026-05-15 02:16:36.80
+c6845206
+User
+at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+2026-05-15 02:16:36.80
+c6845206
+User
+^
+2026-05-15 02:16:36.80
+c6845206
+User
+node:internal/modules/cjs/loader:1210
+2026-05-15 02:16:36.80
+c6845206
+User
+code: 'MODULE_NOT_FOUND',
+2026-05-15 02:16:36.80
+c6845206
+User
+at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+2026-05-15 02:16:36.80
+c6845206
+User
+requireStack: []
+2026-05-15 02:16:36.80
+c6845206
+User
+at Module._load (node:internal/modules/cjs/loader:1038:27)
+2026-05-15 02:16:36.80
+c6845206
+User
+}
+2026-05-15 02:16:36.80
+c6845206
+User
+Node.js v20.20.0
+2026-05-15 02:16:36.80
+c6845206
+User
+at node:internal/main/run_main_module:28:49 {
+2026-05-15 02:16:36.80
+c6845206
+System
+command finished with error [node ./dist/index.cjs]: exit status 1
+2026-05-15 02:16:38.02
+c6845206
+User
+^
+2026-05-15 02:16:38.02
+c6845206
+User
+at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+2026-05-15 02:16:38.02
+c6845206
+User
+at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+2026-05-15 02:16:38.02
+c6845206
+User
+at Module._load (node:internal/modules/cjs/loader:1038:27)
+2026-05-15 02:16:38.02
+c6845206
+User
+Error: Cannot find module '/home/runner/workspace/dist/index.cjs'
+2026-05-15 02:16:38.02
+c6845206
+User
+at node:internal/main/run_main_module:28:49 {
+2026-05-15 02:16:38.02
+c6845206
+User
+node:internal/modules/cjs/loader:1210
+2026-05-15 02:16:44.05
+c6845206
+System
+crash loop detected
