@@ -34,6 +34,7 @@ import { FeedbackPage } from "@/pages/FeedbackPage";
 import { Groups } from "@/components/Groups";
 import { Tournaments } from "@/components/Tournaments";
 import { EarnPage } from "@/pages/EarnPage";
+import { PaymentsPage } from "@/pages/PaymentsPage";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import DataDeletionRequest from "@/pages/DataDeletionRequest";
 import ChildSafetyStandards from "@/pages/ChildSafetyStandards";
@@ -84,8 +85,8 @@ function Router() {
   const [location, setLocation] = useLocation();
 
   // Helper to map URL to page name
-  const getPageFromUrl = (url: string): "home" | "search" | "create" | "profile" | "messages" | "voice-channels" | "settings" | "profile-setup" | "connections" | "ads" | "feedback" | "groups" | "tournaments" | "earn" => {
-    const urlToPage: { [key: string]: "home" | "search" | "profile" | "messages" | "voice-channels" | "settings" | "profile-setup" | "connections" | "ads" | "feedback" | "groups" | "tournaments" | "earn" } = {
+  const getPageFromUrl = (url: string): "home" | "search" | "create" | "profile" | "messages" | "voice-channels" | "settings" | "profile-setup" | "connections" | "ads" | "feedback" | "groups" | "tournaments" | "earn" | "payments" => {
+    const urlToPage: { [key: string]: "home" | "search" | "profile" | "messages" | "voice-channels" | "settings" | "profile-setup" | "connections" | "ads" | "feedback" | "groups" | "tournaments" | "earn" | "payments" } = {
       "/": "home",
       "/discover": "search",
       "/connections": "connections",
@@ -95,6 +96,7 @@ function Router() {
       "/tournaments": "tournaments",
       "/ads": "ads",
       "/earn": "earn",
+      "/payments": "payments",
       "/feedback": "feedback",
       "/profile": "profile",
       "/settings": "settings",
@@ -120,6 +122,7 @@ function Router() {
     | "groups"
     | "tournaments"
     | "earn"
+    | "payments"
   >(() => getPageFromUrl(location));
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showAuthPage, setShowAuthPage] = useState(false);
@@ -136,6 +139,7 @@ function Router() {
       "tournaments": "/tournaments",
       "ads": "/ads",
       "earn": "/earn",
+      "payments": "/payments",
       "feedback": "/feedback",
       "profile": "/profile",
       "settings": "/settings",
@@ -454,6 +458,12 @@ function Router() {
             <EarnPage currentUserId={user?.id} />
           </div>
         );
+      case "payments":
+        return (
+          <div className="md:ml-20 pt-16 md:pt-6 pb-16 md:pb-6 px-4">
+            <PaymentsPage currentUserId={user?.id} />
+          </div>
+        );
       case "feedback":
         return (
           <div className="md:ml-20 pt-16 md:pt-6 pb-16 md:pb-6 px-4">
@@ -655,6 +665,25 @@ function Router() {
             }}
           </Route>
           <Route path="/earn">
+            {() => {
+              return (
+                <div className="min-h-screen relative">
+                  {mapUserForComponents(user as User | null) && (
+                    <GameNavigation
+                      currentPage={currentPage as any}
+                      onNavigate={handleNavigation}
+                      user={mapUserForComponents(user as User | null) as any}
+                      onLogout={handleLogout}
+                    />
+                  )}
+                  <div className="relative z-10">
+                    {renderMainContent()}
+                  </div>
+                </div>
+              );
+            }}
+          </Route>
+          <Route path="/payments">
             {() => {
               return (
                 <div className="min-h-screen relative">

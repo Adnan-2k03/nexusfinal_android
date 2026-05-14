@@ -19,7 +19,8 @@ import {
   Phone,
   Coins,
   Trophy,
-  Shield
+  Shield,
+  Crown
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -29,7 +30,7 @@ import { useFeatureFlags } from "@/hooks/useFeatureFlags";
 import { CreditsDisplay } from "./CreditsDisplay";
 
 interface GameNavigationProps {
-  currentPage: "home" | "search" | "create" | "profile" | "messages" | "voice-channels" | "settings" | "profile-setup" | "connections" | "ads" | "feedback" | "groups" | "tournaments" | "earn";
+  currentPage: "home" | "search" | "create" | "profile" | "messages" | "voice-channels" | "settings" | "profile-setup" | "connections" | "ads" | "feedback" | "groups" | "tournaments" | "earn" | "payments";
   onNavigate: (page: string) => void;
   user?: {
     gamertag: string;
@@ -67,6 +68,7 @@ export function GameNavigation({
     { id: "groups", label: "Groups", icon: Users, featureName: "groups" },
     { id: "tournaments", label: "Tournaments", icon: Trophy, featureName: "tournaments" },
     { id: "earn", label: "Earn", icon: Coins },
+    { id: "payments", label: "Upgrade", icon: Crown },
     { id: "feedback", label: "Feedback", icon: MessageSquare, featureName: "feedback" },
     { id: "profile", label: "Profile", icon: User },
   ];
