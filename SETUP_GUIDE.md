@@ -174,6 +174,31 @@ npm run cap:sync
 | Google OAuth not working | Update the callback URL in Google Cloud Console (Step 7) |
 | Voice channels not working | Add 100ms secrets (Step 4) |
 | File uploads failing | Add Cloudflare R2 secrets (Step 4) |
+| Local `main` branch is behind `origin/main` (Git panel shows different commits) | See **Git Sync Issue** section below |
+| `error: cannot lock ref 'refs/remotes/origin/HEAD': Unable to create '...HEAD.lock': File exists` | See **Git Sync Issue** section below |
+
+---
+
+## Git Sync Issue — Syncing Local Branch with origin/main
+
+When you import this project into a new Replit account, the Replit Git panel may show your local `main` branch as separate from `origin/main` (the remote on GitHub). Clicking `origin/main` in the branch dropdown does **not** switch to it — it's a read-only remote reference, not a local branch.
+
+To make your local `main` match `origin/main` exactly, run these commands in the **Shell**:
+
+**Step 1 — Remove stale git lock file (if you see a `.lock` error):**
+```bash
+rm -f /home/runner/workspace/.git/refs/remotes/origin/HEAD.lock
+```
+
+**Step 2 — Fetch and reset to the remote branch:**
+```bash
+git fetch origin
+git reset --hard origin/main
+```
+
+This overwrites your local `main` with the full project history from GitHub. It is safe to run on a fresh import where no local work has been done yet.
+
+> **Why does this happen?** When Replit creates a new project from GitHub, it sometimes creates a fresh local `main` branch with only an "Initial commit" instead of pulling the full remote history. The two branches then have unrelated histories, which is why a normal `git pull` fails.
 
 ---
 
