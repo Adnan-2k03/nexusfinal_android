@@ -2,33 +2,54 @@
 
 Everything you need to get this project running on a fresh Replit account, from scratch, with no agent help.
 
----
-
-## Step 1 — Import the Project
-
-1. Go to [replit.com](https://replit.com) and log in.
-2. Click **+ Create Repl** → **Import from GitHub** (or upload the zip).
-3. Once imported, open the **Shell** tab at the bottom.
+> **Run every command one at a time. Do not paste multiple commands together.**
 
 ---
 
-## Step 2 — Install Dependencies
+## Step 0 — Sync Git (Do This First)
 
-Run this in the Shell:
+When Replit imports the project from GitHub, it sometimes creates a fresh local `main` branch that is behind the real remote. You must fix this before doing anything else.
 
+Open the **Shell** tab and run these commands **one at a time**:
+
+**If you see a lock file error (`...HEAD.lock: File exists`), run this first:**
 ```bash
-npm install
+rm -f /home/runner/workspace/.git/refs/remotes/origin/HEAD.lock
 ```
 
-This installs all frontend and backend packages. It takes 1-2 minutes.
+**Then fetch and reset to the real remote branch:**
+```bash
+git fetch origin
+```
+```bash
+git reset --hard origin/main
+```
+
+This replaces your local branch with the full project history from GitHub. Safe to run on a fresh import.
+
+> **Why is this needed?** Replit sometimes initialises a brand-new local `main` with only an "Initial commit" instead of pulling the full history from GitHub. The two branches have unrelated histories, so a normal `git pull` fails.
 
 ---
 
-## Step 3 — Provision the Database
+## Step 1 — Install Dependencies
+
+Run this in the Shell. The `--include=dev` flag ensures **all** packages are installed, including build tools like Vite and TypeScript:
+
+```bash
+npm install --include=dev
+```
+
+This takes 1-3 minutes. You should see output ending with something like `added 900 packages`.
+
+> **Important:** A plain `npm install` (without `--include=dev`) sometimes skips development dependencies in Replit, leaving Vite, TypeScript, drizzle-kit, and esbuild missing. Always use `--include=dev`.
+
+---
+
+## Step 2 — Provision the Database
 
 1. In the left sidebar, click the **Database** icon (or go to **Tools → Database**).
-2. Click **Create Database** — Replit will provision a free PostgreSQL database automatically.
-3. The `DATABASE_URL`, `PGHOST`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`, `PGPORT` variables are set automatically. You do not need to copy anything.
+2. Click **Create Database** — Replit provisions a free PostgreSQL database automatically.
+3. The environment variables `DATABASE_URL`, `PGHOST`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`, and `PGPORT` are set automatically. You do not need to copy anything.
 
 Then push the database schema:
 
@@ -36,19 +57,19 @@ Then push the database schema:
 npm run db:push
 ```
 
-You should see `[✓] Changes applied` when it succeeds.
+You should see output confirming tables were created or already exist.
 
 ---
 
-## Step 4 — Set Environment Variables (Secrets)
+## Step 3 — Set Environment Variables (Secrets)
 
-Go to **Tools → Secrets** in the left sidebar and add the following.
+Go to **Tools → Secrets** in the left sidebar and add the following keys.
 
-### Required (app won't start without these)
+### Required — App won't start without these
 
 | Secret Key | Value | Where to get it |
 |---|---|---|
-| `SESSION_SECRET` | Any long random string | Run `openssl rand -base64 32` in the Shell |
+| `SESSION_SECRET` | Any long random string | Run `openssl rand -base64 32` in the Shell and copy the output |
 
 ### Required for Authentication (Google OAuth + Firebase Phone Auth)
 
@@ -58,9 +79,9 @@ Go to **Tools → Secrets** in the left sidebar and add the following.
 | `GOOGLE_CLIENT_SECRET` | Your client secret | Same as above |
 | `FIREBASE_PROJECT_ID` | `playlink-42bff` | [console.firebase.google.com](https://console.firebase.google.com) → Project Settings |
 | `FIREBASE_CLIENT_EMAIL` | `firebase-adminsdk-...@....iam.gserviceaccount.com` | Firebase → Project Settings → Service Accounts → Generate New Private Key |
-| `FIREBASE_PRIVATE_KEY` | `-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n` | Same JSON file as above (copy the `private_key` field exactly, including `\n`) |
+| `FIREBASE_PRIVATE_KEY` | `-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n` | Same JSON file as above — copy the `private_key` field exactly, including all `\n` characters |
 | `FIREBASE_WEB_API_KEY` | `AIzaSy...` | Firebase → Project Settings → General → Web API Key |
-| `VITE_FIREBASE_WEB_API_KEY` | Same as above | Same |
+| `VITE_FIREBASE_WEB_API_KEY` | Same value as above | Same |
 | `VITE_FIREBASE_PROJECT_ID` | `playlink-42bff` | Same |
 | `VITE_FIREBASE_APP_ID` | `1:584288019310:web:...` | Firebase → Project Settings → Your Apps → App ID |
 
@@ -82,42 +103,32 @@ Go to **Tools → Secrets** in the left sidebar and add the following.
 | `R2_BUCKET_NAME` | `gamematch-uploads` (or your bucket name) | Cloudflare → R2 → Create Bucket |
 | `R2_PUBLIC_URL` | `https://pub-xxx.r2.dev` | Cloudflare → R2 → Bucket → Settings → Public Access |
 
-### Optional (AdMob — only needed for Android/iOS)
+### Optional — AdMob (only needed for Android/iOS builds)
 
 | Secret Key | Value | Where to get it |
 |---|---|---|
 | `VITE_ADMOB_BANNER_ID` | `ca-app-pub-xxx/yyy` | [admob.google.com](https://admob.google.com) |
 | `VITE_ADMOB_REWARDED_ID` | `ca-app-pub-xxx/zzz` | Same |
 
-> **Tip:** If you just want to run the app without Google login, add a secret `AUTH_DISABLED` = `true`. This bypasses all authentication so you can test the UI freely. Remove it when you're ready to go live.
+> **Shortcut for testing:** Add `AUTH_DISABLED` = `true` as a secret to bypass all login and test the UI immediately. Remove it before going live.
 
 ---
 
-## Step 5 — Configure the Workflow
+## Step 4 — Configure and Start the Workflow
 
-1. Go to **Tools → Workflows** (or click the play button area at the top).
-2. If a workflow called **Start application** already exists, you're done.
-3. If not, create one with this command:
+1. Click the **Run** button at the top of Replit — it should automatically start the app using `npm run dev`.
+2. If no workflow is configured yet, go to **Tools → Workflows** and create one with:
+   - **Command:** `npm run dev`
+   - **Port:** `5000`
+   - **Output type:** Webview
 
-```
-npm run dev
-```
-
-Set the port to **5000** and output type to **Webview**.
+The app will be live in the Preview pane at port `5000`.
 
 ---
 
-## Step 6 — Run the App
+## Step 5 — Update Google OAuth Callback URL
 
-Click the **Run** button (or start the **Start application** workflow).
-
-The app will be live in the preview pane at port `5000`.
-
----
-
-## Step 7 — Update Google OAuth Callback URL
-
-When you import into a new Replit account, your app URL changes. Update the Google OAuth redirect URI:
+When you import into a new Replit account, your app URL changes. You must update the Google OAuth redirect URI or login will fail.
 
 1. Go to [console.cloud.google.com](https://console.cloud.google.com) → **APIs & Services → Credentials**.
 2. Click your OAuth 2.0 Client.
@@ -125,39 +136,47 @@ When you import into a new Replit account, your app URL changes. Update the Goog
    ```
    https://<your-repl-dev-domain>/api/auth/google/callback
    ```
-   Your dev domain looks like: `e7c8ee28-xxxx.sisko.replit.dev`
-   You can find it in the Shell by running:
+   Find your dev domain by running this in the Shell:
    ```bash
    echo $REPLIT_DEV_DOMAIN
    ```
+   It looks like: `e7c8ee28-xxxx.sisko.replit.dev`
 
 ---
 
 ## All Commands — Quick Reference
 
-```bash
-# Install all dependencies
-npm install
+Run each command **separately**, one at a time:
 
-# Push database schema (run after npm install, and after any schema changes)
+```bash
+# Step 0 — Fix git sync (fresh import only)
+git fetch origin
+git reset --hard origin/main
+
+# Step 1 — Install all dependencies (include dev tools)
+npm install --include=dev
+
+# Step 2 — Push database schema
 npm run db:push
 
-# Start development server (runs backend + frontend together on port 5000)
+# Step 4 — Start development server (port 5000)
 npm run dev
+```
 
-# Build for production
+```bash
+# Build for production (creates dist/ folder)
 npm run build
 
-# Start production server (after building)
+# Start production server (requires build to have run first)
 npm run start
 
 # Type check the codebase
 npm run check
 
-# Build Android/iOS app (requires Capacitor setup)
+# Build and sync Android/iOS (requires Capacitor setup)
 npm run cap:build
 
-# Sync Capacitor (copies web build into Android/iOS folders)
+# Sync Capacitor only (copies web build into Android/iOS folders)
 npm run cap:sync
 ```
 
@@ -167,38 +186,20 @@ npm run cap:sync
 
 | Problem | Fix |
 |---|---|
-| `tsx: not found` | Run `npm install` first, then try again |
-| `getaddrinfo ENOTFOUND` on startup | Database URL is broken — make sure the Replit Database is provisioned (Step 3) |
-| `Firebase Admin SDK` warning on startup | Firebase secrets are missing — add them in Secrets (Step 4) |
+| `vite: not found` when running `npm run dev` | Run `npm install --include=dev` — devDependencies were skipped |
+| `tsc: not found` when running `npm run check` | Run `npm install --include=dev` — TypeScript wasn't installed |
+| `Cannot find module drizzle-kit/bin.cjs` | Run `npm install --include=dev` — drizzle-kit binary is missing |
+| `Cannot find module dist/index.js` on `npm run start` | Run `npm run build` first to generate the dist folder |
+| `Could not find installation of TypeScript` on `cap:sync` | Run `npm install --include=dev` — TypeScript wasn't installed |
+| `tsx: not found` | Run `npm install --include=dev` first, then try again |
+| `getaddrinfo ENOTFOUND` on startup | Database URL is broken — make sure the Replit Database is provisioned (Step 2) |
+| `Firebase Admin SDK` warning on startup | Firebase secrets are missing — add them in Secrets (Step 3) |
 | White screen / 401 errors | Add secret `AUTH_DISABLED=true` to skip login during testing |
-| Google OAuth not working | Update the callback URL in Google Cloud Console (Step 7) |
-| Voice channels not working | Add 100ms secrets (Step 4) |
-| File uploads failing | Add Cloudflare R2 secrets (Step 4) |
-| Local `main` branch is behind `origin/main` (Git panel shows different commits) | See **Git Sync Issue** section below |
-| `error: cannot lock ref 'refs/remotes/origin/HEAD': Unable to create '...HEAD.lock': File exists` | See **Git Sync Issue** section below |
-
----
-
-## Git Sync Issue — Syncing Local Branch with origin/main
-
-When you import this project into a new Replit account, the Replit Git panel may show your local `main` branch as separate from `origin/main` (the remote on GitHub). Clicking `origin/main` in the branch dropdown does **not** switch to it — it's a read-only remote reference, not a local branch.
-
-To make your local `main` match `origin/main` exactly, run these commands in the **Shell**:
-
-**Step 1 — Remove stale git lock file (if you see a `.lock` error):**
-```bash
-rm -f /home/runner/workspace/.git/refs/remotes/origin/HEAD.lock
-```
-
-**Step 2 — Fetch and reset to the remote branch:**
-```bash
-git fetch origin
-git reset --hard origin/main
-```
-
-This overwrites your local `main` with the full project history from GitHub. It is safe to run on a fresh import where no local work has been done yet.
-
-> **Why does this happen?** When Replit creates a new project from GitHub, it sometimes creates a fresh local `main` branch with only an "Initial commit" instead of pulling the full remote history. The two branches then have unrelated histories, which is why a normal `git pull` fails.
+| Google OAuth not working | Update the callback URL in Google Cloud Console (Step 5) |
+| Voice channels not working | Add 100ms secrets (Step 3) |
+| File uploads failing | Add Cloudflare R2 secrets (Step 3) |
+| Local `main` branch is behind `origin/main` | See Step 0 above |
+| `error: cannot lock ref '...HEAD.lock': File exists` | Run `rm -f /home/runner/workspace/.git/refs/remotes/origin/HEAD.lock` then retry |
 
 ---
 

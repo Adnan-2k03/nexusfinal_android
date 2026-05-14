@@ -1,0 +1,131 @@
+~/workspace$ # Install all dependencies
+npm install
+
+# Push database schema (run after npm install, and after any schema changes)
+npm run db:push
+
+# Start development server (runs backend + frontend together on port 5000)
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server (after building)
+npm run start
+
+# Type check the codebase
+npm run check
+
+# Build Android/iOS app (requires Capacitor setup)
+npm run cap:build
+
+# Sync Capacitor (copies web build into Android/iOS folders)
+npm run cap:sync
+npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+
+added 807 packages, and audited 808 packages in 18s
+
+78 packages are looking for funding
+  run `npm fund` for details
+
+50 vulnerabilities (7 low, 28 moderate, 13 high, 2 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+> rest-express@1.0.0 db:push
+> NODE_OPTIONS='--max-old-space-size=1024' tsx node_modules/drizzle-kit/bin.cjs push --config drizzle.config.ts
+
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/runner/workspace/node_modules/drizzle-kit/bin.cjs' imported from /home/runner/workspace/
+    at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+    at moduleResolve (node:internal/modules/esm/resolve:952:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+    at nextResolve (node:internal/modules/esm/hooks:864:28)
+    at resolveBase (file:///home/runner/workspace/node_modules/tsx/dist/esm/index.mjs?1778787306044:2:3744)
+    at resolveDirectory (file:///home/runner/workspace/node_modules/tsx/dist/esm/index.mjs?1778787306044:2:4243)
+    at resolveTsPaths (file:///home/runner/workspace/node_modules/tsx/dist/esm/index.mjs?1778787306044:2:4984)
+    at resolve (file:///home/runner/workspace/node_modules/tsx/dist/esm/index.mjs?1778787306044:2:5361)
+    at nextResolve (node:internal/modules/esm/hooks:864:28)
+    at Hooks.resolve (node:internal/modules/esm/hooks:306:30) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/runner/workspace/node_modules/drizzle-kit/bin.cjs'
+}
+
+Node.js v20.20.0
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'vite' imported from /home/runner/workspace/server/vite.ts
+    at packageResolve (node:internal/modules/esm/resolve:873:9)
+    at moduleResolve (node:internal/modules/esm/resolve:946:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+    at nextResolve (node:internal/modules/esm/hooks:864:28)
+    at resolveBase (file:///home/runner/workspace/node_modules/tsx/dist/esm/index.mjs?1778787306492:2:3744)
+    at resolveDirectory (file:///home/runner/workspace/node_modules/tsx/dist/esm/index.mjs?1778787306492:2:4243)
+    at resolveTsPaths (file:///home/runner/workspace/node_modules/tsx/dist/esm/index.mjs?1778787306492:2:4984)
+    at async resolve (file:///home/runner/workspace/node_modules/tsx/dist/esm/index.mjs?1778787306492:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:864:22)
+    at async Hooks.resolve (node:internal/modules/esm/hooks:306:24) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v20.20.0
+
+> rest-express@1.0.0 build
+> vite build --outDir dist/client && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+sh: 1: vite: not found
+
+> rest-express@1.0.0 start
+> NODE_ENV=production node dist/index.js
+
+node:internal/modules/cjs/loader:1210
+  throw err;
+  ^
+
+Error: Cannot find module '/home/runner/workspace/dist/index.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Module._load (node:internal/modules/cjs/loader:1038:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.20.0
+
+> rest-express@1.0.0 check
+> tsc
+
+sh: 1: tsc: not found
+
+> rest-express@1.0.0 cap:build
+> npm run build:frontend && npx cap sync
+
+
+> rest-express@1.0.0 build:frontend
+> vite build
+
+sh: 1: vite: not found
+
+> rest-express@1.0.0 cap:sync
+> npx cap sync
+
+[error] Could not find installation of TypeScript.
+        To use capacitor.config.ts files, you must install TypeScript in your project, e.g. w/
+        npm install -D typescript
+~/workspace$ 
