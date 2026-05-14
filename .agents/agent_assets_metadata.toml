@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "nMwrJR6AT-pF6OYve1TO8"
+uri = "file://SETUP_GUIDE.md"
+type = "text"
+title = "NexusMatch Setup Guide"
