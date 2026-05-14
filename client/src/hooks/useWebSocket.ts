@@ -26,16 +26,9 @@ export function useWebSocket() {
       const protocol = url.protocol === "https:" ? "wss:" : "ws:";
       wsUrl = `${protocol}//${url.host}/ws`;
     } else {
-      // Fallback: only use window.location if we're in development (localhost)
-      const isSameDomain = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      if (isSameDomain) {
-        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-        wsUrl = `${protocol}//${window.location.host}/ws`;
-      } else {
-        // In production without VITE_API_URL, don't attempt connection
-        console.warn('WebSocket: VITE_API_URL not configured. Set it to your backend URL.');
-        return;
-      }
+      // Use window.location — works for localhost, Replit proxy, and production same-domain
+      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      wsUrl = `${protocol}//${window.location.host}/ws`;
     }
 
     let reconnectAttempts = 0;
